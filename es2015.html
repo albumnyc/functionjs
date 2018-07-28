@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // var obj = {
+        //     a: {
+        //         c: 1
+        //     }
+        // };
+        // const deepFreeze = (object) => {
+        //     Object.getOwnPropertyNames.forEach((prop) => {
+        //         var prop = object[prop];
+        //         if (typeof prop == 'object' && prop != null) {
+        //             deepFreeze(prop);
+        //         } else {
+        //             return Object.freeze(object);
+        //         }
+        //     })
+        // }
+        // deepFreeze(obj);
+
+        var fibo = {
+            a: 0,
+            b: 1,
+            [Symbol.iterator]() {
+                return {
+                    next() {
+                        [fibo.a, fibo.b] = [fibo.b, fibo.a + fibo.b];
+                        return {
+                            done: false,
+                            value: fibo.b
+                        }
+                    }
+                }
+            }
+        }
+        for (const n of fibo) {
+            if (n > 100) {
+                break;
+            }
+            console.log(n);
+        }
+    </script>
+</body>
+
+</html>

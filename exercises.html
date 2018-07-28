@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .li {
+            transition: color 300ms linear;
+            color: transparent;
+            /* display: none; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ul">
+        <!-- <div class="li">li1</div>
+        <div class="li">li2</div>
+        <div class="li">li3</div>
+        <div class="li">li4</div>
+        <div class="li">li5</div>
+        <div class="li">li6</div> -->
+    </div>
+    <script>
+        function loop($el, autoReset) {
+            this.list = [];
+            this.el = $el;
+            this.autoReset = autoReset;
+        }
+        loop.prototype.pushState = function(fn) {
+            this.list.push(fn);
+        }
+        loop.prototype.reset = function() {
+            var _this = this;
+            var stateFn = Promise.resolve();
+            (async function() {
+                await new Promise(function(res) {
+                    var li = document.createElement('li');
+                    li.innerText = "我是li";
+                    li.className = "li";
+                    setTimeout(function() {
+                        _this.el.appendChild(li);
+                        res();
+                    }, 1000)
+                })
+                _this.list.forEach((item, index) => {
+                    stateFn = stateFn.then(_ =>
+                        new Promise((res) => {
+                            item.call(_this, res, 1000);
+                        })
+                    )
+                })
+                if (_this.autoReset) {
+                    stateFn.then(() => {
+                        // console.log(this); //*****************特么的居然指向new loop
+                        _this.reset();
+                    })
+                }
+            })()
+        }
+        var array = new loop(document.getElementsByClassName('ul')[0], true);
+        array.pushState(function(next, timer) {
+            setTimeout(_ => {
+                setColor(this.el.lastElementChild, 'red');
+                next()
+            }, timer)
+        })
+        array.pushState(function(next, timer) {
+            setTimeout(_ => {
+                setColor(this.el.lastElementChild, 'yellow');
+                next()
+            }, timer)
+        })
+        array.pushState(function(next, timer) {
+            setTimeout(_ => {
+                setColor(this.el.lastElementChild, 'blue');
+                next()
+            }, timer)
+        })
+        array.reset();
+
+        function setColor(dom, color) {
+            dom.style.color = color;
+        }
+    </script>
+</body>
+
+</html>
