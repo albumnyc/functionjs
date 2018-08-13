@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        .wrapper {
+            height: 100vh;
+            background-size: 50px 50px;
+            background: repeating-radial-gradient(#f61726, #f99 10%, #f032 30%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+
+    </div>
+    <script>
+        var data = [   {     
+            parentId: 0,
+                 id: 1,
+                 value: '1'   
+        },     {     
+            parentId: 3,
+                 id: 2,
+                 value: '2'   
+        },     {     
+            parentId: 0,
+                 id: 3,
+                 value: '3'   
+        },     {     
+            parentId: 1,
+                 id: 4,
+                 value: '4'   
+        },     {     
+            parentId: 1,
+                 id: 5,
+                 value: '5'   
+        }];
+        var node = {   
+            children: [    {      
+                children: [       {         
+                    children: [],
+                             id: 2,
+                            value: '2'       
+                }      ],
+                      id: 3,
+                      value: '3'    
+            },      {      
+                children: [       {         
+                    children: [],
+                             id: 4,
+                             value: '4'       
+                },         {         
+                    children: [],
+                             id: 5,
+                            value: '5'       
+                }      ],
+                      id: 1,
+                      value: '1'    
+            }   ],
+               id: 0,
+               value: undefined
+        }
+
+        // function change(data) {
+        //     var id = 0;
+        //     var arr = [];
+        //     let node = {
+        //         id: 0,
+        //         value: undefined,
+        //         children: []
+        //     };
+        //     for (let i = 0; i < data.length; i++) {
+        //         var item = data[i];
+        //         arr[item.id] = arr[item.id] ?
+        //             arr[item.id].push(data[i]) :
+        //             arr[item.id] = [].concat(data[i]);
+        //     }
+        //     arr.forEach((item, index) => {
+        //         if (index > 0) {
+        //             function a(index, node) {
+        //                 if (!index) {
+        //                     return node.children;
+        //                 } else {
+        //                     return a(index - 1, node.children);
+        //                 };
+        //             }
+        //             console.log(a(index - 1, node));
+        //             // a(index, node) = item;
+        //             // node.children = item;
+        //         }
+        //     })
+        //     return node;
+        // }
+        // change(data);
+
+
+
+
+        var arr = [func1, func2, func3];
+
+        function func1(ctx, next) {  
+            ctx.index++ ; 
+            next();
+        }
+
+        function func2(ctx, next) {  
+            setTimeout(function() {   
+                ctx.index++ ;  
+                next();  
+            });
+        }
+
+        function func3(ctx, next) {  
+            console.log(ctx.index);
+        } 
+        var compose = function(...args) {
+            var len = args.length
+            var count = len - 1
+            var result
+            return function f1(...args1) {
+                result = args[count].apply(this, args1)
+                if (count <= 0) {
+                    count = len - 1
+                    return result
+                } else {
+                    count--
+                    return f1.call(null, result)
+                }
+            }
+        }
+
+        function compose(...arr) {
+            let count = arr.length - 1;
+            var obj;
+            return function(params) {
+                arr[count](params)
+            }
+        }
+        compose(arr)({
+            index: 0
+        });
+    </script>
+</body>
+
+</html>

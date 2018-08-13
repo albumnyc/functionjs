@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #light {
+            display: none;
+        }
+        
+        #main {
+            position: relative;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            color: #000;
+            transition: all .5s;
+        }
+        
+        #light:checked+#main {
+            background-color: #000;
+            color: #fff;
+        }
+        
+        .pic {
+            float: left;
+            margin-right: 20px;
+        }
+        
+        .content {
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        
+        #lightButton {
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            position: absolute;
+            left: 30px;
+            top: 30px;
+            cursor: pointer;
+            background: red;
+        }
+        
+        #light:checked+#main #lightButton {
+            background: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="traffic"></div>
+    <div style="background:red;">
+        sda
+    </div>
+    <input id="light" type="checkbox"></input>
+    <div id="main">
+        <div class="pic">
+            <img src="https://p4.ssl.qhimg.com/t01e932bf06236f564f.jpg">
+        </div>
+        <div class="content">
+            <pre>
+            今天回到家，
+            煮了点面吃，
+            一边吃面一边哭，
+            泪水滴落在碗里，
+            没有开灯。
+            </pre>
+        </div>
+        <label for="light">
+            <span id="lightButton"> </span>
+          <label>
+        </div>
+    <script>
+function async(value) { 
+  return new Promise(function(resolve, reject) { 
+    var ms = Math.round(Math.random() * 1000); 
+    setTimeout(function() { 
+      console.log('waiting ' + ms + 'ms'); 
+      // 等待ms毫秒
+      resolve(value + ms); 
+    }, ms); 
+  }); 
+} 
+// 每次执行随机等待n毫秒，结果统计总毫秒数
+async(0) 
+.then(async) 
+.then(async) 
+.then(async) 
+.then(async) 
+.then(function(value) { 
+  console.log('------total wait:' + value + 'ms'); 
+}); 
+
+
+
+
+
+        var divs = document.querySelectorAll('div pre');
+        function * loop(list, max = Infinity){
+            let i = 1;
+            //noprotect
+            while(i){
+                //   console.log(i);
+                yield list[(i++ % list.length)-1];
+            }
+        }
+        function toggle(...actions){
+            // console.log(actions);   // [ƒ, ƒ, ƒ]
+            let action = loop(actions);
+            return function(...args){
+                // console.log(action.next().value.apply(this, args));
+                //  action.next().value.apply(this, args);
+                // console.log(window);
+                // console.log(this);
+                 action.next().value.apply(document,args);
+            }
+        }
+        document.onclick = toggle(
+            evt => evt.target.className = 'warn',
+            evt => evt.target.className = 'off',
+            evt => evt.target.className = 'on'
+        );
+
+
+
+
+
+          //////////下面是抽奖系统的函数
+        function * draw(amount){
+            const cards = Array(amount).fill().map((_,i)=>i+1); 
+            for(let i = amount - 1; i >= 0; i--){
+                let rand = Math.floor((i + 1) * Math.random());
+                [cards[rand], cards[i]] =  [cards[i], cards[rand]];
+                yield cards[i];
+            }
+        }
+        var drawer = draw(62);
+        console.log(Array(10).fill().map(()=>drawer.next().value)); //一次取出10个结果
+
+
+
+
+
+
+              //    面向对象   ///高逼格函数
+const trafficEl = document.getElementById("traffic");
+function TrafficProtocol(el, reset){
+  this.subject = el;
+  this.autoReset = reset;
+  this.stateList = [];
+}
+
+TrafficProtocol.prototype.putState = function(fn){
+  this.stateList.push(fn);
+}
+
+TrafficProtocol.prototype.reset = function(){
+  let subject = this.subject;
+  this.statePromise = Promise.resolve();
+  this.stateList.forEach((stateFn) => {
+    this.statePromise = this.statePromise.then(()=>{
+      return new Promise(resolve => {
+        stateFn(subject, resolve);
+      });
+    });
+    // console.log(this.statePromise);            
+  });
+  // console.log(this.autoReset);
+  if(this.autoReset){
+    this.statePromise.then(this.reset.bind(this));
+  }
+}
+
+TrafficProtocol.prototype.start = function(){
+  this.reset();
+}
+
+var traffic = new TrafficProtocol(trafficEl, true);
+
+traffic.putState(function(subject, next){
+  subject.className = "wait";
+  setTimeout(next, 3000);
+});
+
+traffic.putState(function(subject, next){
+  subject.className = "stop";
+  setTimeout(next, 3000);
+});
+
+traffic.putState(function(subject, next){
+  subject.className = "pass";
+  setTimeout(next, 3000);
+});
+
+traffic.start();
+
+
+var p = Promise.resolve();
+var i = 0;
+var arr = Array(100).fill().map(i=>++i);
+  arr.forEach((fn) => {
+    p=p.then(()=>{
+      return new Promise(resolve => {
+             console.log('sss');
+             setTimeout(resolve,3000);
+      });
+    });
+    // console.log(this.statePromise);            
+  });
+
+
+
+
+  async function reducer(promise, action){
+  let res = await promise;
+  return action(res);
+}
+
+function continuous(...functors){
+  return async function(input){
+    return await functors.reduce(reducer, input)
+  }
+}
+
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function setColor(item, color){
+  await sleep(500);
+  item.style.color = color;
+}
+
+let comb = R.lift((el, color) => {
+  return [el, color];
+});
+
+let changeColorTo = (args) => R.partial(setColor, args);
+
+let items = Array.from(list.children);
+
+let task = R.map(changeColorTo, comb(
+  items,
+  ['red', 'orange', 'yellow']
+));
+
+continuous(...task)(0);
+
+
+
+
+async function x(){
+    var arr = [1,2,3]; 
+    await arr.reduce((a,b)=>{
+        setTimeout(_=>{
+        console.log(a+b);            
+           return  a+b;
+        },500)
+    }
+)}
+        </script>
+</body>
+</html>

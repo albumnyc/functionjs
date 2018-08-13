@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            touch-action: manipulation;
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        .img-border {
+            width: 200px;
+            height: 200px;
+            background: red;
+            transition: clip-path 500ms linear;
+            clip-path: circle(40% at 50% 50%);
+        }
+        
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .img-border:hover {
+            clip-path: circle(70% at 50% 50%);
+        }
+        
+        .grid {
+            display: grid;
+            height: 200px;
+            grid-template-columns: 100px auto 100px;
+        }
+        
+        .table {
+            height: 100px;
+            width: 100px;
+            /* display: table-cell; */
+            /* display: table; */
+        }
+        
+        .table2 {
+            width: 70px;
+            height: 40px;
+            margin: 0 auto;
+            background: green;
+        }
+        
+        li:nth-last-of-type(5)~li {
+            background: blue;
+        }
+        
+        input:invalid+label {
+            color: red;
+        }
+        
+        input:invalid+label::before {
+            content: attr(data-err);
+        }
+        
+        label::before {
+            content: '请输入密码'
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid">
+        <div class="grid1" style="background:red;border:1px solid pink;">grid1</div>
+        <div class="grid2" style="background:red;border:1px solid pink;">grid2</div>
+        <div class="grid1" style="background:red;border:1px solid pink;">grid3</div>
+    </div>
+    <div class="table">
+        <!-- <div class="table1">table1</div> -->
+        <div class="table2">table2 <mark>想念小双双</mark> </div>
+        <!-- <div class="table3">table3</div> -->
+    </div>
+    <div class="img-border">
+        <img src="../projects/nycsss/src/assets/sssss.png" alt="">
+    </div>
+    <li>li1</li>
+    <li>li2</li>
+    <li>li3</li>
+    <li>li4</li>
+    <li>li5</li>
+    <div style="display:flex;">
+        <input id="hehe" type="text" pattern="\d{3,5}" style="order:2">
+        <label for="hehe" data-err="密码错误" style="order:1"></label>
+    </div>
+
+    <script>
+        //**************************************************一定要注意静态作用域
+        function foo() {
+            console.log(a);
+        }
+
+        function bar() {
+            var a = 3;
+            // console.log(a);
+            foo();
+        }
+        var a = 2;
+        bar();
+
+
+
+        /////****************没写出来
+        // var array = [
+        //     [
+        //         1, 2, 3, 4
+        //     ],
+        //     [
+        //         5, 6, 7, 8
+        //     ],
+        //     [
+        //         9, 10, 11, 12
+        //     ]
+        // ]
+        // var arr = [];
+
+        // function max(x) {
+        //     var y = 0;
+        //     while (x >= 0) {
+        //         console.log(x, y);
+        //         console.log(array[x][y])
+        //         arr.push(array[x][y]);
+        //         x--;
+        //         y++;
+        //     }
+        // }
+        // for (var i = 0; i < array.length + 1; i++) {
+        //     max(i);
+        // }
+
+
+
+
+        var p = Promise.resolve();
+        for (var i = 0; i < 10; i++) {
+            (function(i) {
+                p = p.then(() => {
+                    return new Promise((res) => {
+                        setTimeout(() => {
+                            res();
+                            console.log(i);
+                        }, 1000)
+                    });
+                })
+            })(i)
+        }
+
+        function debounce(fn) {
+            var lock = false;
+            return function(...args) {
+                if (!lock) {
+                    lock = true;
+                    fn();
+                    setTimeout(_ => {
+                        lock = false;
+                    }, 300)
+                }
+            }
+        }
+        document.onclick = debounce(function(a, b) {
+            console.log(1);
+            document.dispatchEvent(myEvent, 'dasd');
+        })
+
+
+
+
+        function once(fn) {
+            return function(...args) {
+                let ret = fn.apply(this, args);
+                fn = null;
+                return ret;
+            }
+        }
+
+        function foo(x) {
+            console.log(x)
+        };
+        // f = once(foo);
+
+
+        document.addEventListener('login', (e) => {
+            console.log(e.detail);
+        })
+        var myEvent = new CustomEvent('login', {
+            detail: {
+                username: 'dasdsa'
+            }
+        })
+
+
+
+
+
+
+
+
+
+
+        /////////////   投票系统
+        // function* pick(num) {
+        //     while (initArr.length) {
+        //         const random = Math.floor(Math.random() * initArr.length);
+        //         [initArr[random], initArr[initArr.length]] = [initArr[initArr.length], initArr[random]]
+        //         yield initArr[initArr.length];
+        //     }
+        // }
+
+        function* draw(amount) {
+            const cards = Array.isArray(amount) ? amount : Array(amount).fill().map((a, i) => ++i);
+            for (let i = amount - 1; i >= 0; i--) {
+                let rand = Math.floor((i + 1) * Math.random());
+                [cards[rand], cards[i]] = [cards[i], cards[rand]];
+                yield cards[i];
+            }
+        }
+        var drawer = draw(62);
+        console.log(Array(10).fill().map(() => drawer.next().value)); //一次取出10个结果
+    </script>
+</body>
+
+</html>

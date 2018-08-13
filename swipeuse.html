@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #slider {
+            width: 600px;
+            height: 50px;
+        }
+        
+        .div {
+            width: 600px;
+            border: 1px solid red;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        li {
+            list-style: none;
+            width: 10px;
+            float: left;
+        }
+        
+        .list {}
+        
+        .list>div {
+            width: 10px;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="slider">
+        <div class="div">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </div>
+        <div class="list">
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <button>
+            left
+    </button>
+    <button>
+        right
+    </button>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
+    </script> -->
+    <!-- <script src="./swipe.js">
+    </script> -->
+    <script>
+        class Swipe {
+            constructor(props) {
+                const CloneElement = props.$el.children[0].firstElementChild.cloneNode(true);
+                props.$el.children[0].appendChild(CloneElement);
+                const {
+                    $el,
+                    timer = 2000,
+                    transitionTime = 500,
+                    currentIndex = 0,
+                    width = 500,
+                    autoReset = true
+                } = props;
+                if ($el && $el.children[0]) {
+                    this.rootDom = $el.children[0];
+                    this.len = this.rootDom.children.length;
+                }
+                const mount = (key, value) => {
+                    this[key] = value;
+                }
+                const mapMount = (arr) =>
+                    arr.forEach((item, index) => {
+                        mount(item[0], item[1]);
+                    })
+                mapMount([
+                    [
+                        'timer', timer
+                    ],
+                    [
+                        'transitionTime', transitionTime
+                    ],
+                    [
+                        'currentIndex', currentIndex
+                    ],
+                    [
+                        'width', width
+                    ],
+                    [
+                        '$el', $el
+                    ],
+                    [
+                        'autoReset', autoReset
+                    ]
+                ]);
+            }
+            init() {
+                this.setTimer = null;
+                this.setTimerLock = false;
+                this.rootDom.style.width = `${this.width*(this.len+1)}px`;
+                this.$el.style.width = `${this.width}px`;
+                this.$el.style.overflow = 'hidden';
+                [...this.rootDom.children].forEach((dom, domIndex) => {
+                    dom.style.width = `${this.width}px`;
+                });
+                this.$el.style.position = 'relative';
+            }
+            moveTo(index) {
+                if (index < this.len) {
+                    this.currentIndex = index;
+                    this.rootDom.style.transition = `transform linear ${this.transitionTime}ms`
+                    this.rootDom.style.transform = `translateX(${-this.width*index}px)`
+                }
+            }
+            autoMove() {
+                this.setTimerLock = true;
+                const move = () => {
+                    if (this.currentIndex < this.len - 1) {
+                        this.setTimer = setTimeout(_ => {
+                            this.moveTo(++this.currentIndex);
+                            setTimeout(_ => {
+                                this.setTimerLock && move();
+                            }, this.transitionTime);
+                        }, this.timer)
+                    } else {
+                        if (this.autoReset) {
+                            this.setTimer = setTimeout(_ => {
+                                this.moveRight();
+                                setTimeout(_ => {
+                                    this.autoMove();
+                                }, this.transitionTime)
+                            }, this.timer)
+                        }
+                    }
+                }
+                move();
+            }
+            stop() {
+                this.setTimer && clearTimeout(this.setTimer);
+                if (this.setTimerLock) {
+                    this.setTimerLock = false;
+                }
+                return this;
+            }
+            addPlugins(plugins) {
+                plugins.forEach((plugin) => {
+                    plugin.bind(this)();
+                })
+            }
+        }
+
+        function plugin1() {
+            this.moveRight = _ => {
+                this.stop();
+                if (this.currentIndex == this.len - 1) {
+                    this.rootDom.style.transform = 'translateX(0)';
+                    this.rootDom.style.transition = `transform linear 0ms`
+                    this.currentIndex = 0;
+                    setTimeout(_ => {
+                        this.moveTo(++this.currentIndex);
+                    }, 0);
+                    return this;
+                }
+                this.moveTo(++this.currentIndex);
+            }
+            this.moveLeft = _ => {
+                this.stop();
+                if (this.currentIndex == 0) {
+                    this.rootDom.style.transition = `transform linear 0ms`;
+                    this.rootDom.style.transform = `translateX(${-this.width*(this.len-1)}px)`
+                    this.currentIndex = this.len - 1;
+                    setTimeout(_ => {
+                        this.moveTo(--this.currentIndex);
+                    }, 0);
+                    return this;
+                }
+                this.moveTo(--this.currentIndex);
+            }
+            return this;
+        }
+
+        function plugin2() {
+            const getIndex = _ => this.currentIndex;
+            const main = document.getElementsByClassName('list')[0];
+
+        }
+
+
+        console.log(swiper = new Swipe({
+            $el: document.getElementsByTagName('div')[0],
+            transitionTime: 2000,
+            timer: 1000
+        }))
+        swiper.init();
+        swiper.autoMove();
+        swiper.addPlugins([plugin1]);
+
+
+
+
+        document.body.getElementsByTagName('button')[0].onclick = _ => {
+            swiper.moveRight();
+        }
+
+        document.body.getElementsByTagName('button')[1].onclick = _ => {
+            swiper.moveLeft();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .list {
+            margin: 8px 0;
+            padding: 16px;
+            background-color: #fff;
+        }
+        
+        .adsense {
+            display: block;
+            height: 100vh;
+            background: url('./aa.png') no-repeat fixed;
+            background-position: bottom;
+            background-size: 432px;
+            color: transparent;
+        }
+        
+        #slider {
+            width: 600px;
+            height: 50px;
+        }
+        
+        .div {
+            width: 600px;
+            border: 1px solid red;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        li {
+            list-style: none;
+            width: 10px;
+            float: left;
+        }
+        
+        .list>div {
+            width: 10px;
+            height: 20px;
+        }
+        
+        .out1 {
+            position: relative;
+            top: 100px;
+            right: 100px;
+            transform: translateY(100px);
+            border-top: 100px solid red;
+            box-sizing: content-box;
+            margin-top: 100px;
+        }
+        
+        .out2 {
+            position: absolute;
+            top: 100px;
+        }
+        
+        .out3 {
+            position: absolute;
+            top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="list" style="height:10px;">
+    </div>
+    <div class="list">
+        <p>占位示例图片...</p>
+        <p><img src="./aa.png"></p>
+    </div>
+    <a href="#" class="adsense" target="_blank">CSS世界京东</a>
+    <div class="list">
+        <p>占位示例图片，...</p>
+        <p><img src="./m.jpeg"></p>
+    </div>
+    <!-- <div class="list">
+        <p>占位示例图片...</p>
+    </div> -->
+    <div class="out1 ">
+        1
+        <div class="out2 ">
+            2
+            <div class="out3 ">
+                3
+            </div>
+        </div>
+    </div>
+    <div id="slider ">
+        <div class="div ">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </div>
+        <div class="list ">
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+            <div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <button>
+            left
+    </button>
+    <button>
+        right
+    </button>
+    <script>
+        function step(n, res) {
+            if (n == 0) {
+                res = []
+            }
+            var i = 1
+            while (i < 3) {
+                if (n + i <= 10) {
+                    var _res = res.slice()
+                    _res.push(i)
+                    if (n + i == 10) {
+                        console.log(_res)
+                    } else {
+                        step(n + i, _res)
+                    }
+                }
+                i++
+            }
+        }
+        step(0)
+
+
+
+        function printArr(arr, n, res) {
+            for (var i = 0; i < arr[i].length; i++) {
+                // console.log(arr[i]);///) [1, 2]  [3, 4]
+                if (n == 0) {
+                    res = []
+                }
+                if (n < arr.length) {
+                    var _res = res.slice();
+                    _res.push(arr[n][i]);
+                    console.log(_res);
+                    if (n == arr.length - 1) {
+                        console.log(_res)
+                    } else {
+                        // printArr(arr, n + 1, _res)
+                    }
+                }
+            }
+        }
+        // 测试：
+        var arr = [
+            [1, 2],
+            [3, 4],
+            [5, 6]
+        ]
+        printArr(arr, 0);
+
+        var str = `1   2  3  a 
+            4   5   6 b  
+            7  8   9  c`
+            //输出
+        var arr = [
+            [1, 2, 3, 'a'],
+            [4, 5, 6, 'b'],
+            [7, 8, 9, 'c']
+        ]
+
+        //实现
+        str.split('\n').map(row => row.trim().split(/\s+/g))
+
+
+
+        // 组合串联
+        let fn1 = (a) => a + 1;
+        let fn2 = (b) => b + 2;
+        let fn3 = (c) => c + 3;
+
+        let funs = [fn1, fn2, fn3];
+
+        let compose = (func) => {
+            return arg => func.reduceRight((composed, fn) => fn(composed), arg);
+        }
+        console.log(compose(funs)(100)); // 相当于fn1(fn2(fn3(100)))
+
+
+        function fe(a, b, c) {
+            return a + b + c;
+        }
+
+        function curry(fe) {
+            let args = []; // 参数集合
+            let len = args.length;
+            return function bar() {
+                args = [...args, ...arguments]; // 收集参数
+                if (args.length >= fe.length) {
+                    return fe.apply(this, args);
+                }
+                return bar;
+            }
+        }
+
+        console.log(curry(fe)(1)(2)(3)); // 6
+
+
+
+
+
+
+
+        var out = document.getElementsByClassName('out3')[0];
+        console.log(out.offsetTop);
+        console.log(out.getBoundingClientRect().top);
+        class Swipe {
+            constructor(props) {
+                const CloneElement = props.$el.children[0].firstElementChild.cloneNode(true);
+                props.$el.children[0].appendChild(CloneElement);
+                const {
+                    $el,
+                    timer = 2000,
+                    transitionTime = 500,
+                    currentIndex = 0,
+                    width = 500,
+                    autoReset = true
+                } = props;
+                if ($el && $el.children[0]) {
+                    this.rootDom = $el.children[0];
+                    this.len = this.rootDom.children.length;
+                }
+                const mount = (key, value) => {
+                    this[key] = value;
+                }
+                const mapMount = (arr) =>
+                    arr.forEach((item, index) =>
+                        mount(item[0], item[1])
+                    )
+                mapMount([
+                    [
+                        'timer', timer
+                    ],
+                    [
+                        'transitionTime', transitionTime
+                    ],
+                    [
+                        'currentIndex', currentIndex
+                    ],
+                    [
+                        'width', width
+                    ],
+                    [
+                        '$el', $el
+                    ],
+                    [
+                        'autoReset', autoReset
+                    ]
+                ]);
+            }
+            init() {
+                this.setTimer = null;
+                this.setTimerLock = false;
+                this.rootDom.style.width = `${this.width*(this.len+1)}px`;
+                this.$el.style.width = `${this.width}px`;
+                this.$el.style.overflow = 'hidden';
+                [...this.rootDom.children].forEach((dom, domIndex) => {
+                    dom.style.width = `${this.width}px`;
+                });
+                this.$el.style.position = 'relative';
+            }
+            moveTo(index) {
+                if (index < this.len) {
+                    this.currentIndex = index;
+                    this.rootDom.style.transition = `transform linear ${this.transitionTime}ms`
+                    this.rootDom.style.transform = `translateX(${-this.width*index}px)`
+                }
+            }
+            autoMove() {
+                this.setTimerLock = true;
+                const move = () => {
+                    if (this.currentIndex < this.len - 1) {
+                        this.setTimer = setTimeout(_ => {
+                            this.moveTo(++this.currentIndex);
+                            setTimeout(_ => {
+                                this.setTimerLock && move();
+                            }, this.transitionTime);
+                        }, this.timer)
+                    } else {
+                        if (this.autoReset) {
+                            this.setTimer = setTimeout(_ => {
+                                this.moveRight();
+                                setTimeout(_ => {
+                                    this.autoMove();
+                                }, this.transitionTime)
+                            }, this.timer)
+                        }
+                    }
+                }
+                move();
+            }
+            stop() {
+                this.setTimer && clearTimeout(this.setTimer);
+                if (this.setTimerLock) {
+                    this.setTimerLock = false;
+                }
+                return this;
+            }
+            addPlugins(plugins) {
+                plugins.forEach((plugin) => {
+                    plugin.bind(this)();
+                })
+            }
+        }
+
+        function plugin1() {
+            this.moveRight = _ => {
+                this.stop();
+                if (this.currentIndex == this.len - 1) {
+                    this.rootDom.style.transform = 'translateX(0)';
+                    this.rootDom.style.transition = `transform linear 0ms`
+                    this.currentIndex = 0;
+                    setTimeout(_ => {
+                        this.moveTo(++this.currentIndex);
+                    }, 0);
+                    return this;
+                }
+                this.moveTo(++this.currentIndex);
+            }
+            this.moveLeft = _ => {
+                this.stop();
+                if (this.currentIndex == 0) {
+                    this.rootDom.style.transition = `transform linear 0ms`;
+                    this.rootDom.style.transform = `translateX(${-this.width*(this.len-1)}px)`
+                    this.currentIndex = this.len - 1;
+                    setTimeout(_ => {
+                        this.moveTo(--this.currentIndex);
+                    }, 0);
+                    return this;
+                }
+                this.moveTo(--this.currentIndex);
+            }
+            return this;
+        }
+
+        function plugin2() {
+            const getIndex = _ => this.currentIndex;
+            const main = document.getElementsByClassName('list')[0];
+
+        }
+
+
+        console.log(swiper = new Swipe({
+            $el: document.getElementsByTagName('div')[0],
+            transitionTime: 2000,
+            timer: 1000
+        }))
+        swiper.init();
+        swiper.autoMove();
+        swiper.addPlugins([plugin1]);
+
+
+
+
+        document.body.getElementsByTagName('button')[0].onclick = _ => {
+            swiper.moveRight();
+        }
+
+        document.body.getElementsByTagName('button')[1].onclick = _ => {
+            swiper.moveLeft();
+        }
+
+
+
+
+
+
+
+
+
+
+        // HTTP1 .1 与 HTTP2 .0 区别
+        // 在浏览器端， HTTP / 2 仅能在TLS下运行， 也就是HTTPS。 这不是因为HTTP / 2 标准强制要求， 而是全球两大浏览器领导者—— Firefox和Chrome都明确地表示， 他们只会实现基于TLS的HTTP / 2。
+        // HTTP / 2 取消了大量头字段， 并且取消了小版本号。 也就是说服务器和客户端都必须确定自己是否完整兼容http2或者彻底不兼容。
+        // HTTP / 2 不再是一个基于文本的协议， 通过新增的二进制分帧层变成了一个二进制协议， 这意味着：
+        // HTTP / 2 使用二进制帧进行数据交换。 HTTP / 2 规范中一共定义了10种帧， 其中最基础的两种分别对应于HTTP / 1.1 的DATA和HEADERS帧HTTP / 2 可以对压缩头信息进行压缩了。 反正是二进制帧。
+        // 利用帧， HTTP / 2 可以在单个TCP连接上高效传输所有资源： 通过在单个连接上建立多个流， 实现流的多路复用。 流可以指派一个优先级， 也可以为流建立依赖关系。 这样可以避免“ 浏览器明明在等关键的CSS和JS， 服务器却还在发图片”。 完全避免线头阻塞。
+        // 服务器可以利用RST_STREAM帧随时中断某个chunk的发送。
+        // 服务器可以主动向客户端推送资源让客户端缓存。 当然， 客户端可以使用RST_STREAM帧拒绝掉服务器的“ 好意”。
+        // HTTP / 2 的流可以进行流量控制， 通过公示流量窗口来限制另一端发送数据。
+    </script>
+</body>
+
+</html>

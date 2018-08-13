@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //selector的原理
+        // 复杂度比较       先找div再找p是   n2
+        // 先找p再找div是 nlgn
+        // 最好先删除子节点有div的，因为  div  div p => div p  复杂度为n
+        var divs = document.documentElement.getElementsByTagName("div");
+        divs = makeArray(divs);
+        for (var i = 1; i < divs.length; i++) {
+            //  for循环发现包含了就删除里面的div
+            if (dom_contains(divs[i - 1], divs[i])) {
+                //除重，复杂度N。
+                //如果dom里前者包含后者，则移者后者
+                //当前循环标记-1
+                //结果将是
+                //第一轮：[1,3,4,5,6], i=1
+                //第二轮：[1,4,5,6] i=1
+                //第三轮：[1,5,6] i=1
+                //第四轮：[1,6] i=1
+                //第五轮：[1] i=1
+                divs.splice(i, 1);
+                i--;
+            }
+        }
+
+
+
+        ///webworker的多线程
+        // 得到的结果可以发现，线程中得到的data的id增加了，但是传回来之后，
+        // 并没有改变主线程的bundle中的id，因此，线程中传递的对象实际上copy了一份，
+        // 这样的话，线程并没有共享数据，避免了读写冲突，所以是安全的。
+        // 保证线程安全的代价就是限制了在线程中操作主线程对象的能力。
+        var worker = new Worker("my.js");
+        var bundle = {
+            message: "Hello world",
+            id: 1
+        };
+        worker.postMessage(bundle); //postMessage可以传一个可序列化的对象过去
+        worker.onmessage = function(evt) {
+                console.log(evt.data); //比较worker中传回来的对象和主线程中的对象
+                console.log(bundle); //{message:"Hello world", id:1}
+            }
+            //in my.js
+        onmessage = function(evt) {
+            var data = evt.data;
+            data.id++;
+            postMessage(data); //{message:"Hello world", id:2}
+        }
+
+
+
+
+
+
+
+
+        ///////           数组的全随机排序
+        function shuffle(arr) {
+            var len = arr.length;
+            for (var i = 0; i < len - 1; i++) {
+                var idx = Math.floor(Math.random() * (len - i));
+                var temp = arr[idx];
+                arr[idx] = arr[len - i - 1];
+                arr[len - i - 1] = temp;
+            }
+            return arr;
+        }
+        var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        var res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var t = 10000;
+        for (var i = 0; i < t; i++) {
+            var sorted = shuffle(arr.slice(0));
+            sorted.forEach(function(o, i) {
+                res[i] += o;
+            });
+        }
+        res = res.map(function(o) {
+            return o / t;
+        });
+        console.log(res);
+
+
+
+
+
+
+        //js语言的mixin
+        function mixin(...args) {
+            var obj = {};
+            args.forEach((arg, index) => {
+                for (let prop in arg) {
+                    obj[prop] = arg[prop];
+                }
+            })
+            console.log(obj);
+            return obj;
+        }
+        var obj1 = {
+            a: 1
+        };
+        var obj2 = {
+            b: 2
+        }
+        var obj3 = {
+            b: 3,
+            c: 4
+        }
+        mixin(obj1, obj2, obj3);
+
+
+
+
+
+
+
+
+        ///////////    选择合适的文字高度
+        document.body.querySelectorAll('.box');
+        // loop
+        for (var j = 0; j < wordboxs.length; j++) {
+            const wordbox = wordboxs[j];
+            // init the fontisze
+            wordbox.style.fontSize = '12px';
+            for (var i = 12; i < 200; i++) {
+                console.log(i);
+                if (wordbox.offsetHeight > maxHeight) {
+                    // if it's height heighter than thhe maxHeight
+                    wordbox.style.fontSize = (i - 2) + 'px';
+                    break;
+                } else {
+                    // if it's height less then the maxHeight
+                    wordbox.style.fontSize = i + 'px';
+
+                }
+            }
+        }
+
+
+
+
+
+
+
+        ///////////////es6 的  proxy        类似于getter和setter的扩展
+        let validator = {
+            set: function(obj, prop, value) {
+                if (prop === 'age') {
+                    if (!Number.isInteger(value)) {
+                        throw new TypeError('The age is not an integer');
+                    }
+                    if (value > 200) {
+                        throw new RangeError('The age seems invalid');
+                    }
+                };
+                obj[prop] = value;
+            }
+        };
+        let person = new Proxy({}, validator);
+        person.age = 100;
+        console.log(person.age); // 100
+        person.age = 'young'; // 抛异常
+        person.age = 300; // 值太大了，也抛异常
+        //////////////////reflect
+        ///////////***************demo1
+        var Fn = function(arg) {
+            this.args = [arg];
+        };
+        console.log(new Fn(1), Reflect.construct(Fn, [1])); // 输出是一样的
+        // ************   demo2
+        let fn = function() {
+            this.attr = [0, 1, 2, 3];
+        };
+        let obj = {};
+        Reflect.apply(fn, obj, [])
+        console.log(obj);
+        ///*****************defineProperty的作用
+        Reflect.defineProperty(obj, "x", {
+                value: 7
+            }) ///**********还有deleteProperty
+
+
+
+
+
+
+        // ******proxy和reflet的混合使用
+        obj = new Proxy({}, {
+            has(t, k) {
+                return k.startsWith("door");
+            }
+        });
+        Reflect.has(obj, "doorbell"); // true
+        Reflect.has(obj, "dormitory"); // false
+        var obj = {
+            value: 10,
+            set key(value) {
+                console.log("setter");
+                this.value = value;
+            },
+            get key() {
+                return this.value;
+            }
+        };
+        Reflect.set(obj, "key", "heheda", obj);
+        console.log(obj);
+
+
+
+
+
+
+
+
+
+
+
+        //   *********************二叉对
+        function MaxBinaryHeap(key) {
+            if (!(this instanceof MaxBinaryHeap))
+                return new MaxBinaryHeap(key);
+            this.key = key; //key表示用来排序的字段
+            this.size = 0; //堆大小 这里堆大小和数组大小一致
+            this.list = []; //用于存放堆元素 存放的是对象
+        }
+        MaxBinaryHeap.prototype = {
+            constructor: MaxBinaryHeap,
+            //获取某个节点的父节点
+            parent: function(i) {
+                let p = Math.floor((i - 1) / 2);
+                if (i > this.size - 1 || p < 0) return null;
+                return p; //这里返回的 p 是在数组中的下标，数组是从0开始的
+            },
+            //获取某个节点的左孩子
+            left: function(i) {
+                let l = 2 * i + 1;
+                if (l > this.size - 1) return null;
+                return l;
+            },
+            //获取某个节点的右孩子
+            right: function(i) {
+                let r = 2 * i + 2;
+                if (r > this.size - 1) return null;
+                return r;
+            },
+            //元素下沉 对下标为i的元素向下进行调整，使堆保持其性质
+            maxHeapify: function(i) {
+                let list = this.list;
+                let key = this.key;
+                let l = this.left(i);
+                let r = this.right(i);
+                let larget = null;
+                if (l != null) { //左孩子为空则右孩子一定为空
+                    if (r == null) larget = l;
+                    else larget = list[l][key] > list[r][key] ? l : r;
+                    if (list[i][key] >= list[larget][key]) return;
+                    else {
+                        let t = list[i];
+                        list[i] = list[larget];
+                        list[larget] = t;
+                        this.maxHeapify(larget);
+                    }
+                }
+            },
+            //元素上浮 对下标为i的元素进行向上调整，使堆保持其性质
+            increase: function(i) {
+                let list = this.list;
+                let p = this.parent(i);
+                while (i > 0 && list[p][this.key] < list[i][this.key]) { //i > 0 一定能保证 p != null
+                    let t = list[i];
+                    list[i] = list[p];
+                    list[p] = t;
+                    i = this.parent(i);
+                    p = this.parent(i);
+                }
+            },
+            //构建堆
+            buildHeap: function(a) {
+                this.list = a;
+                this.size = a.length;
+                for (let i = Math.floor(a.length / 2) - 1; i > -1; i--) {
+                    this.maxHeapify(i);
+                }
+            },
+            //堆排序 由小到大
+            heapSort: function(a) {
+                this.buildHeap(a);
+                for (let i = this.size - 1; i > 0; i--) {
+                    let t = this.list[0];
+                    this.list[0] = this.list[i];
+                    this.list[i] = t;
+                    this.size--;
+                    this.maxHeapify(0);
+                }
+                return this.list;
+            }
+        }
+
+        //优先队列
+        function MaxPriorityQueue(key, a) {
+            if (!(this instanceof MaxPriorityQueue))
+                return new MaxPriorityQueue(key, a);
+            this.maxBinaryHeap = MaxBinaryHeap(key);
+            if (a != null) this.maxBinaryHeap.buildHeap(a);
+            this.key = key;
+        }
+        MaxPriorityQueue.prototype = {
+                constructor: MaxPriorityQueue,
+                insert: function(x) { //加入一个元素
+                    this.maxBinaryHeap.size++;
+                    this.maxBinaryHeap.list[this.maxBinaryHeap.size - 1] = x;
+                    //向上调整
+                    this.maxBinaryHeap.increase(this.maxBinaryHeap.size - 1);
+                },
+                max: function() { //获取最大元素
+                    let max = this.maxBinaryHeap.list[0];
+                    this.removeMax();
+                    return max;
+                },
+                removeMax: function() { //移除最大元素
+                    let list = this.maxBinaryHeap.list;
+                    let size = this.maxBinaryHeap.size;
+                    let max = list[0];
+                    list[0] = list[size - 1];
+                    list.shift(size - 1); //删除
+                    this.maxBinaryHeap.size--;
+                    this.maxBinaryHeap.maxHeapify(0); //元素下沉操作
+                    return max;
+                },
+                update: function(i, x) { //更新元素
+                    this.maxBinaryHeap.list[i] = x;
+                    this.maxBinaryHeap.maxHeapify(i); //元素下沉操作
+                    this.maxBinaryHeap.increase(i); //元素上浮操作
+                }
+            }
+            //测试用例
+        var a = [{
+            key: 1
+        }, {
+            key: 7
+        }, {
+            key: 2
+        }, {
+            key: 5
+        }, {
+            key: 3
+        }, {
+            key: 2
+        }, {
+            key: 6
+        }, {
+            key: 10
+        }];
+        var priorityQueue = MaxPriorityQueue('key', a);
+        priorityQueue.insert({
+            key: 11
+        }); //插入一个元素
+        priorityQueue.max(); //获取最大元素并删除
+        priorityQueue.removeMax(); //删除最大元素
+        priorityQueue.update(3, {
+            key: 100
+        }); //更新下标为3的元素
+        console.log(a);
+    </script>
+</body>
+
+</html>

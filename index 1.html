@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0px;
+        list-style: none;
+        margin: 0px;
+    }
+    
+    .ul {
+        width: 100vw;
+        display: flex;
+        height: 200px;
+    }
+    
+    .ul>li {
+        box-sizing: border-box;
+        padding: 30px 0;
+        flex: 1;
+        background: red;
+        margin: 0 50px;
+        transition: all 500ms linear;
+    }
+    
+    .ul>li>div {
+        background: pink;
+        height: 100%;
+    }
+    
+    .ul>li:hover {
+        padding: 0px;
+    }
+    
+    .yellow {
+        height: 80%;
+        background: yellow !important;
+    }
+    
+    .parent {
+        display: flex;
+        align-items: flex-end;
+    }
+    
+    .cao {
+        height: 500px;
+        display: grid;
+        /* grid-template-columns: 100px 0 auto 100px; */
+        /* grid-template-areas: 100px 0 auto 100px; */
+        /* grid-template-columns: 200px; */
+        /* grid-template-columns: 100px 1fr max-content minmax(min-content, 1fr); */
+        grid-template-columns: 100px 1fr max-content 2fr;
+        /* grid-auto-flow: dense; */
+        /* grid-auto-columns: max-content; */
+    }
+    
+    .cao .mimi:nth-of-type(1) {
+        grid-column: 1;
+    }
+    
+    .parent {
+        display: grid;
+        grid-template-columns: 1fr 30px 250px;
+        grid-template-rows: 50px auto 50px;
+        grid-template-areas: "header header header" "main . sidebar" "footer footer footer"
+    }
+    
+    .header {
+        grid-area: header;
+    }
+    
+    .main {
+        grid-area: main;
+    }
+    
+    .sidebar {
+        grid-area: sidebar;
+    }
+    
+    .footer {
+        grid-area: footer;
+    }
+    
+    .parent {
+        height: 90vh;
+        border: 5px solid #333;
+    }
+    
+    .grid-area {
+        background-color: #F8F3A8;
+        border-radius: 10px;
+        font: 25px Georgia;
+        border: 5px solid #949494;
+        text-align: center;
+    }
+    
+    @media (max-width: 600px) {
+        .parent {
+            grid-template-columns: auto;
+            grid-template-rows: 50px auto auto 50px;
+            grid-template-areas: "header" "sidebar" "main" "footer"
+        }
+    }
+    
+    .centerparent {
+        height: 300px;
+        background: red;
+        display: table;
+        width: 100%;
+    }
+    
+    .center {
+        display: table-cell;
+        width: 300px;
+        height: 200px;
+        margin: 0 auto;
+        margin-top: calc( 50%);
+        background: #fff;
+    }
+    
+    .wrapper {
+        height: 400px;
+        height: 100vh;
+        background: repeating-radial-gradient(#f6126f, #f99 10%, yellowgreen 30%);
+        background-size: 50px 50px;
+        clip-path: circle(40% at 50% 50%);
+    }
+    
+    .box-item {
+        width: 50%;
+        float: left;
+    }
+    
+    .box {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        clip-path: circle(40% at 50% 50%);
+    }
+    
+    .sss:focus-within {
+        background: red;
+    }
+    
+    .sss2:focus-within {
+        background: yellowgreen;
+    }
+    
+    .sss {
+        height: 200px;
+        width: 200px;
+    }
+    
+    .sss2 {
+        width: 100px;
+        height: 100px;
+    }
+    
+    #sss3:focus-within {
+        border-color: #f6126f;
+    }
+    
+    #sss3 {
+        width: 100px;
+        height: 20px;
+    }
+</style>
+
+<body>
+
+
+    <div class="sss">
+        <div class="sss2">
+            <input type="text" id="sss3">
+        </div>
+    </div>
+    <div class="wrapper">
+    </div>
+    <div class="box">
+        <div class="box-item">
+            1
+        </div>
+        <div class="box-item">
+            2
+        </div>
+    </div>
+    <div class="centerparent">
+        <div class="center">
+            juzhong
+        </div>
+    </div>
+    <div class="parent">
+        <div class="header grid-area">Header</div>
+        <div class="main grid-area">Main</div>
+        <div class="sidebar grid-area">Sidebar</div>
+        <div class="footer grid-area">Footer</div>
+    </div>
+    <div class="cao">
+        <div class="mimi">1</div>
+        <div class="mimi">2</div>
+        <div class="mimi">3</div>
+        <div class="mimi">4</div>
+    </div>
+    <ul class="ul">
+        <li>
+            <div class='parent'>
+                1
+                <div class="yellow">
+                    黄色
+                </div>
+            </div>
+        </li>
+        <li>
+            <div>
+                2
+            </div>
+        </li>
+        <li>
+            <div>
+                3
+            </div>
+        </li>
+        <li>
+            <div>4
+
+            </div>
+        </li>
+        <li>
+            <div>5</div>
+        </li>
+    </ul>
+
+
+
+    <script>
+        function step(n, res) {
+            if (n == 0) {
+                res = []
+            }
+            var i = 1
+            while (i < 3) {
+                if (n + i <= 10) {
+                    var _res = res.slice()
+                    _res.push(i);
+                    if (n + i == 10) {
+                        console.log(_res)
+                    } else {
+                        step(n + i, _res)
+                    }
+                }
+                i++
+            }
+        }
+        step(0)
+
+
+
+        function printArr(arr, n, res) {
+            for (var i = 0; i < arr[i].length; i++) {
+                if (n == 0) {
+                    res = []
+                }
+                if (n < arr.length) {
+                    var _res = res.slice()
+                    _res.push(arr[n][i])
+                    if (n == arr.length - 1) {
+                        console.log(_res)
+                    } else {
+                        printArr(arr, n + 1, _res)
+                    }
+                }
+            }
+        }
+        // 测试：
+        var arr = [
+            [1, 2],
+            [3, 4],
+            [5, 6]
+        ]
+        printArr(arr, 0)
+            ///////**************************************************text-align-last: justify;    //这是css文字的两端对其
+        String.prototype.repeat = function(n) {
+            let s = this;
+            let total = '';
+            while (n > 0) {
+                console.log(total); //
+                if (n % 2 == 1) {
+                    total += s;
+                }
+                if (n == 1) {
+                    break;
+                }
+                s += s;
+                n = n >> 1;
+            }
+            return total;
+        }
+
+
+        function MinCoinChange(coins) {
+            var coins = coins;
+            var cache = {};
+            this.makeChange = function(amount) {
+                var me = this;
+                if (!amount) {
+                    return [];
+                }
+                if (cache[amount]) {
+                    return cache[amount];
+                }
+                var min = [],
+                    newMin, newAmount;
+                for (var i = 0; i < coins.length; i++) {
+                    var coin = coins[i];
+                    newAmount = amount - coin;
+                    if (newAmount >= 0) {
+                        newMin = me.makeChange(newAmount);
+                    }
+                    if (newAmount >= 0 && (newMin.length < min.length - 1 || !min.length) && (newMin.length || !newAmount)) {
+                        min = [coin].concat(newMin);
+                        console.log('new Min' + min + 'for ' + amount);
+                    }
+                }
+                return (cache[amount] = min);
+            }
+        }
+        var minCoinChange = new MinCoinChange([1, 5, 10, 25]);
+        minCoinChange.makeChange(36);
+        minCoinChange.makeChange(36);
+
+
+
+
+
+        var initSize = [50, 50];
+        var swiper = document.getElementsByClassName('wrapper')[0];
+        setInterval(() => {
+            if (initSize[0] < 150) {
+                initSize[0] += 20;
+                initSize[1] += 20;
+            } else {
+                initSize = [50, 50];
+            }
+            swiper.style.backgroundSize = `${initSize[0]}px ${initSize[1]}px`;
+        }, 1000)
+        var arr = [func1, func2, func3];
+
+        function func1(ctx, next) {
+            ctx.index++
+                next();
+        }
+
+        function func2(ctx, next) {
+            setTimeout(function() {
+                ctx.index += 100;
+                next();
+            }, 1000);
+        }
+
+        function func3(ctx, next) {
+            console.log(ctx.index);
+        }
+
+
+        // function compose([...arr]) {
+        //     let count = 0;
+        //     console.log(arr);
+        //     return function m(obj) {
+        //         var p = new Promise((res) => {
+        //             arr[count](obj, res(obj));
+        //         }).then((obj) => {
+        //             if (count < arr.length) {
+        //                 count++;
+        //                 m(obj);
+        //             } else {
+        //                 return;
+        //             }
+        //         })
+        //     }
+        // }
+
+        // const compose = (arr) => {
+        //     return function(ctx) {
+        //         [...arr].reverse().reduce((func, item) => {
+        //             return function(ctx) {
+        //                 item(ctx, function() {
+        //                     func(ctx)
+        //                 })
+        //             }
+        //         }, () => {})(ctx)
+        //     }
+        // }
+
+
+        // const compose = (arr) =>
+        //     (ctx) => new Promise((resolve, reject) => {
+        //         func1(ctx, resolve)
+        //     }).then(() =>
+        //         new Promise((resolve, reject) => {
+        //             func2(ctx, resolve)
+        //         })).then(() =>
+        //         new Promise((resolve, reject) => {
+        //             func3(ctx)
+        //         })).catch(e => console.log(e));
+
+        function compose(arr) {
+            let count = 0;
+            return function solve(ctx) {
+                console.log(ctx);
+                if (count < arr.length) {
+                    return new Promise((res, rej) => {
+                        arr[count](ctx, res);
+                        count++;
+                    }).then(() => {
+                        solve(ctx);
+                    })
+                } else {
+                    return ctx;
+                }
+            }
+        }
+        compose(arr)({
+            index: 0
+        }); // 输出：2
+
+
+
+        var EventEmiter = function() {
+            this._events = {};
+        };
+        EventEmiter.prototype.on = function(event, cb) {
+            if (Array.isArray(event)) {
+                for (let i = 0, l = event.length; i < l; i++) {
+                    this.on(event[i], cb);
+                }
+            } else {
+                (this._events[event] || (this._events[event] = [])).push(cb);
+            }
+            return this;
+        };
+        EventEmiter.prototype.once = function(event, cb) {
+            function on() {
+                this.off(event, cb);
+                cb.apply(this, arguments);
+            }
+            on.fn = cb;
+            this.on(event, on);
+            return this;
+        };
+        EventEmiter.prototype.off = function(event, cb) {
+            if (!arguments.length) {
+                this._events = Object.create(null);
+                return this;
+            }
+            if (Array.isArray(event)) {
+                for (let i = 0, l = event.length; i < l; i++) {
+                    this.off(event[i], cb);
+                }
+                return this;
+            }
+            if (!cb) {
+                this._events[event] = null;
+                return this;
+            }
+            if (cb) {
+                let cbs = this._events[event];
+                let i = cbs.length;
+                while (i--) {
+                    if (cb === cbs[i] || cb === cbs[i].fn) {
+                        cbs.splice(i, 1);
+                        break;
+                    }
+                }
+                return this;
+            }
+        };
+        EventEmiter.prototype.emit = function(event) {
+            let cbs = this._events[event];
+            let args = Array.prototype.slice.call(arguments, 1);
+            if (cbs) {
+                for (let i = 0, l = cbs.length; i < l; i++) {
+                    cbs[i].apply(this, args);
+                }
+            }
+        };
+
+        function Foo() {
+            getName = function() {
+                console.log(1)
+            }
+            return this
+        }
+        Foo.getName = function() {
+            console.log(2)
+        }
+        Foo.prototype.getName = function() {
+            console.log(3)
+        }
+        var getName = function() {
+            console.log(4)
+        }
+
+        function getName() {
+            console.log(5)
+        }
+
+        Foo.getName() //2 相当于Foo.getName = function() {}函数运行
+        getName() //4 变量提升，var声明的getName值为undefined，而函数是JS的第一公民，它会第一时间赋值，JS是单线程，所以运行到var的getName这时候又进行了赋值，到function时，已经赋值过所以不会重新赋值，故打印出的是4而不是5。
+        Foo().getName() //1 这时候调用了function Foo()里的getName，然后return this，由于是在全局下调用，这个this指向window，所以会将getName重新赋值。
+        getName() //1 此时调用的getName已被上一个覆盖。getName() = this.getName = window.getName
+        new Foo.getName() //2 new Foo.getName() = new function(){ console.log(2) }
+        new Foo().getName() //3 new了Foo()实例，访问的是Foo原型上的方法getName
+        new new Foo().getName() //3 new Foo().getName优先级比new高，所以先执行new Foo().getName()。所以最后还是3。
+
+
+
+        function fe(a, b, c) {
+            return a + b + c;
+        }
+
+        function curry(fe) {
+            let args = []; // 参数集合
+            let len = args.length;
+            return function bar() {
+                // console.log(...arguments);
+                args = [...args, ...arguments]; // 收集参数
+                if (args.length >= fe.length) {
+                    return fe.apply(this, args);
+                }
+                return bar;
+            }
+        }
+        console.log(curry(fe)(1)(2)(3)); // 6
+
+
+
+
+
+
+        var str = `global:
+  k8s:
+  - file: http://172.27.2.52:35001/global/k8s/129.16.kubeconfig
+    namespace: prophetee-qb
+repo:
+  meta: http://172.27.2.52:35001
+  app: docker02:35000
+  type: k8s
+  user: testuser
+  auth: testpassword
+apps:
+- pkg: init
+- pkg: apigateway
+  env: staging
+  version: release-3.0.0-35
+  template:
+  - key: listenPort
+    value: 80
+  - key: disableAuth
+    value: true
+  - key: enableHostNet
+    value: false`;
+        let arr = str.split(/\n/gim);
+        arr.forEach((item, index) => {
+            const newArr = item.split(':');
+            console.log(newArr[0]);
+        })
+    </script>
+</body>
+
+</html>
