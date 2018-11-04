@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        p:active {
+            color: red;
+        }
+        
+        .space {
+            width: 40px;
+            white-space: pre-wrap;
+        }
+        
+        .pre {
+            width: 40px;
+            white-space: pre;
+            background: red;
+        }
+        
+        .ao {
+            display: inline-block;
+            width: 0px;
+        }
+        
+        .ao::before {
+            content: 'love你love';
+            outline: 2px solid #cd0000;
+            color: #fff;
+            background: hotpink
+        }
+        
+        .tu::after {
+            content: "我love我";
+            outline: 2px solid #cd0000;
+            color: #fff;
+            text-align: right;
+            background: hotpink
+        }
+        
+        .tu {
+            width: 0px;
+            display: inline-block;
+            text-align: right;
+            padding-left: 60px;
+            transform: rotateY(0deg);
+        }
+        
+        .hover-bug:hover {
+            height: 300px;
+            transition: all 1000ms linear;
+            background: red;
+        }
+        
+        img:not([src]) {
+            content: url('./nyc.jpg');
+            width: 100px;
+            object-fit: contain;
+        }
+        
+        dot {
+            display: inline-block;
+            height: 1em;
+            line-height: 1;
+            vertical-align: -1.25rem;
+            overflow: hidden;
+        }
+        
+        dot::before {
+            display: block;
+            content: '...\A..\A.';
+            white-space: pre-wrap;
+            /* *************************        
+                white-space:pre保留空格不换行    
+                white-space:pre-wrap保留空格换行
+                white-space:pre-line合并空格换行
+                
+              */
+            animation: dot 1s infinite step-start both;
+        }
+        
+        @keyframes dot {
+            33% {
+                transform: translateY(-2rem)
+            }
+            66% {
+                transform: translateY(-1rem);
+            }
+        }
+        
+        .data::before {
+            content: attr(data-title);
+            display: block;
+        }
+        
+        .rightfloat {
+            width: 300px;
+            background: red;
+            margin-left: auto;
+        }
+        
+        .big {
+            width: 200px;
+            height: 300px;
+            background: blue;
+            position: relative;
+        }
+        
+        .small {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: yellow;
+            top: 0px;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+        }
+        
+        .borderHight {
+            height: 300px;
+            /* width: 300px; */
+            border-left: 200px solid gold;
+            position: relative;
+            background: #cd0000;
+        }
+        
+        .borderHight::after {
+            position: absolute;
+            left: -200px;
+            content: 'fsf'
+        }
+        
+        .vertical_text {
+            border: 1px dotted firebrick;
+        }
+        
+        .rect {
+            background: red;
+            clip: rect(0, 0, 0, 0);
+            width: 1000px;
+        }
+        
+        .rect:hover {
+            clip: rect(0, 80px, 0, 30px);
+        }
+        
+        @keyframes trans {
+            0% {
+                letter-spacing: -200px;
+            }
+            100% {
+                letter-spacing: 0px;
+            }
+        }
+        
+        .spacing {
+            animation: trans 1s both;
+        }
+        
+        .outline {
+            top: 0px;
+            background: grey;
+            position: absolute;
+            outline: 9999px solid rgba(0, 0, 1, 0.4);
+            clip: rect(0 9999px 9999px 0);
+            left: 0px;
+            width: 100%;
+            /* right: 0px; */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        正z-index > z-index:auto/0 > inline盒子 > float > block > 负z-index > 层叠上下文background/border
+    </h1>
+    <h2>
+        transform比负的z-index还小
+    </h2>
+
+    <div style="width:11ch;">
+        123456789011
+    </div>
+    <span>
+        ch对应一个数字的宽度
+    </span>
+    <p name="#a">
+        active选择器
+    </p>
+    <div class="space">
+        超出部分的pre-wrap
+    </div>
+    <div class="pre">
+        超出部分的pre-wrap
+    </div>
+    <div class="ao"></div>
+    <div class="tu"></div>
+    <div class="hover-bug">
+        应该用max-height避免height的auto变化到某一个值不能trnasition的bug
+    </div>
+    <div>
+        <img> 上面的img是img:not([src])写的
+    </div>
+    正在加载中
+    <dot>...</dot>
+
+    <div data-title="宋小鸡吧的data-属性" class="data"></div>
+
+
+    <div class="rightfloat">
+        通过margin：lefttuao实现的右侧·对其, left: tight, top, bottom共同辅助
+    </div>
+
+
+    <div class="big">
+        <div class="small">
+            通过水平垂直剧中实现的margin：auto；
+        </div>
+    </div>
+
+
+
+    <div class="borderHight">
+        通过border的多列登高
+    </div>
+
+
+
+
+    <div class="parent" style="line-height: 20px;display:inline-block">
+        f
+        <div class="child" style="line-height: 96px;display:inline-block">
+            s
+        </div>
+    </div>
+
+
+    <div>
+        这是个sub标签<sub>sfasf</sub>
+    </div>
+
+    <div>
+        这是个super标签
+        <super>sfasf</super>
+    </div>
+
+
+    <div class="vertical_text">
+        <div style="width:100px;display:inline-block;">
+            vertical-align:textt-op
+        </div>
+        <div style=" width: 100px;vertical-align:text-bottom;display:inline-block;margin-left:200px;">
+            我设置的文字低端对其
+        </div>
+    </div>
+
+
+    <div class="table-ceil" style="vertical-align:middle;display:table-cell;width:100vw;height:700px;text-align:center;">
+        <img src="./id.png">
+        <span>
+            table-ceil的vertical-align:middle；可以作用在本身上实现对其
+        </span>
+    </div>
+
+    <a href="javascript:#a">返回顶部</a>
+
+
+    <div class="rect">
+        我是clip：rect属性
+    </div>
+
+
+    <div class="spacing">
+        我是文字标题的内容
+    </div>
+
+    <div style="word-spacing:100px;">
+        这是 word-spacing 的 \n 功能
+    </div>
+    <div class="text-trnas" style="text-transform:uppercase">
+        text-transform:
+    </div>
+
+    <div>
+        <div class="outline">
+            这是用outline实现的全局覆盖
+        </div>
+    </div>
+
+    <div style="dir:rtl;" dir="rtl">
+        通过dir=“ltr”改变方向 (这是属性，不是style)
+    </div>
+    <span style="unicode-bidi:embed">
+                    只能设置在内敛元素上unicode-bidi:embed
+                </span>
+
+    <script>
+        var arr = [1, 2, 3, 4, 5];
+
+        function* m() {
+            var i = 1;
+            while (i) {
+                console.log(i);
+                yield arr[i++];
+            }
+        }
+        var n = m();
+        n.next();
+
+
+        // var foo = {
+        //     n: 1
+        // };
+        // var bar = foo;
+        // foo.x = foo = {
+        //     n: 2
+        // };
+        // console.log(foo.x);
+    </script>
+</body>
+
+</html>

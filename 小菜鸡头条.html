@@ -65,10 +65,30 @@
         label::before {
             content: '请输入密码'
         }
+        /* \下面的内容是counter-reset的 */
+        
+        .choose {
+            counter-reset: sss;
+        }
+        
+        .choose input:checked {
+            counter-increment: sss;
+        }
+        
+        .count::before {
+            content: counter(sss);
+        }
+        
+        div:target {
+            background: greenyellow;
+        }
     </style>
 </head>
 
 <body>
+    <a href="#sss">
+        sss
+    </a>
     <div class="grid">
         <div class="grid1" style="background:red;border:1px solid pink;">grid1</div>
         <div class="grid2" style="background:red;border:1px solid pink;">grid2</div>
@@ -92,6 +112,16 @@
         <label for="hehe" data-err="密码错误" style="order:1"></label>
     </div>
 
+    <div id="sss">
+        我是被锚地俺的
+    </div>
+
+    <div class="choose">
+        <input type="checkbox">苹果
+        <input type="checkbox">香蕉
+        <input type="checkbox">小鸡
+    </div>
+    你选择了 <span class="count"></span>种类
     <script>
         //**************************************************一定要注意静态作用域
         function foo() {

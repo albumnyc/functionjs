@@ -273,6 +273,14 @@ async function x(){
         },500)
     }
 )}
+
+
+
+Array.prototype.plat = function(){
+    return this.reduce((a,b)=> a.concat(Array.isArray(b)? b.plat() : b),[])
+}
+var arr = [1,[2,3,[3,[4]]],2,3];
+console.log(arr.plat());
         </script>
 </body>
 </html>
