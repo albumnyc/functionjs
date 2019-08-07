@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
 </head>
 
@@ -37,17 +37,31 @@
                         return {
                             done: false,
                             value: fibo.b
-                        }
+                        };
                     }
-                }
+                };
             }
-        }
+        };
         for (const n of fibo) {
             if (n > 100) {
                 break;
             }
             console.log(n);
         }
+
+        let a = {
+            valueOf() {
+                return 0;
+            },
+            toString() {
+                return "1";
+            },
+            [Symbol.toPrimitive]() {
+                return 2;
+            }
+        };
+        1 + a; // => 3
+        "1" + a; // => '12'
     </script>
 </body>
 

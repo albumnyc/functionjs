@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var pageStartTIme = new Date().getTime();
+    </script>
+    <div id="a">
+        dsa
+    </div>
+
+    <script>
+        let startRenderTime;
+        var img = new Image();
+        console.log({
+            newImageTime: new Date().getTime(),
+            pageStartTIme,
+        });
+        window.onload = () => {
+            console.log({
+                windowLoadTIme: new Date().getTime(),
+            });
+        };
+        document.onreadystatechange = (e) => {
+            console.log(document.readyState);
+            if (document.readyState === 'complete') {
+                console.log({
+                    documentReadyTime: new Date().getTime(),
+                });
+                console.log(document.getElementById('a'));
+            }
+        };
+
+        img.onload = () => {
+            startRenderTime = new Date().getTime();
+            console.log({
+                startRenderTime,
+            });
+        };
+        img.src = 'https://static.nowcoder.com/nc/image/identity/2.png';
+    </script>
+</body>
+
+</html>

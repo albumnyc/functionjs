@@ -150,6 +150,47 @@
         compose(arr)({
             index: 0
         });
+        
+        
+        
+        let a = ['a', 'b', 'c', 'd','e','f','g','m'];
+const chunk  =(arr, chunkLength)=>{
+    const retArr = [];
+    const len = arr.length;
+    retArr[0] = arr.slice(0,chunkLength);    
+    for(let i = chunkLength;i<len ; i++){
+        if(retArr[retArr.length-1].length === chunkLength){
+            retArr.push([]);
+        }
+        retArr[retArr.length-1].push(arr[i]);
+    }
+    console.log(retArr);
+}
+let result = chunk(a, 3);
+
+const Person = (stdin)=>{
+     function log (stdin){
+        console.log(stdin);
+    }
+    log(stdin);    
+    return {
+        timer :null,
+        sleep : function (timer){
+            this.timer = timer;
+            return this;
+        },
+        eat: function (stdin){
+            const _this = this;
+            if(_this.timer){
+                setTimeout(()=>{log.call(_this,stdin);_this.timer = null},_this.timer *1000);
+            }else {
+                log(stdin);
+            }
+        },
+    }
+}
+
+Person('1').sleep(1).eat('21');
     </script>
 </body>
 
